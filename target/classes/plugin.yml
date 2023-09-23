@@ -1,0 +1,25 @@
+name: epicplugin
+version: '1.0-SNAPSHOT'
+main: staff.main.Epicplugin
+api-version: '1.18'
+commands:
+  RepairCommand:
+    description: Plugin main command :D
+    usage: /<command>
+    aliases:
+      - epicplugin:repair
+      - ep:repair
+  epicplugin:
+    description: Plugin main command :D
+    aliases:
+      - ep
+  heal:
+    description: with this command you can set the hearts and the food bar
+    usage: /<command>
+    aliases:
+      - epicplugin:heal
+      - ep:heal
+permissions:
+  epicplugin.heal:
+    description: Used to heal a player
+    default: false
