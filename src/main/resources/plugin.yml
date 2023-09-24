@@ -1,6 +1,7 @@
 name: epicplugin
 version: '${project.version}'
 main: staff.main.Epicplugin
+author: Not_staff
 api-version: '1.18'
 commands:
   epicplugin:
