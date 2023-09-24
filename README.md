@@ -7,3 +7,7 @@ realizing how much I enjoyed making this plugin makes me want to cry and I hope 
 1. Download latest jar from Github Actions
 2. Put plugin in `/plugins` folder
 3. Edit `config.yml` file if necessary
+
+## Features
+- Minecraft 1.18 - 1.20 support Luckperms API
+- Join and quit messages
