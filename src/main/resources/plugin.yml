@@ -7,13 +7,12 @@ commands:
   epicplugin:
     description: Plugin main command :D
     aliases:
-      - ep
+      - epicplugin
   heal:
     description: with this command you can set the hearts and the food bar
     usage: /<command>
     aliases:
       - epicplugin:heal
-      - ep:heal
 permissions:
   epicplugin.heal:
     description: Used to heal a player
