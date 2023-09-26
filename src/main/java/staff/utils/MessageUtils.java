@@ -8,3 +8,5 @@ public class MessageUtils {
         return ChatColor.translateAlternateColorCodes('&',message);
     }
 }
+
+// chat color
