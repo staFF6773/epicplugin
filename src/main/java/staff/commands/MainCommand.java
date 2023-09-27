@@ -44,11 +44,12 @@ public class MainCommand implements CommandExecutor {
         return true;
     }
 
+    //help command
     public void help(CommandSender sender){
         sender.sendMessage(MessageUtils.getColoredMessage("&f&l-----------COMMANDS &b&lEPICPLUGIN&f&l-----------"));
         sender.sendMessage(MessageUtils.getColoredMessage("&7- /epicplugin:heal"));
-        sender.sendMessage(MessageUtils.getColoredMessage("&7- /epicplugin get <author/version>"));
         sender.sendMessage(MessageUtils.getColoredMessage("&7- /epicplugin:repair"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7- /epicplugin get <author/version>"));
         sender.sendMessage(MessageUtils.getColoredMessage("&f&l-----------------------------------------"));
     }
 
