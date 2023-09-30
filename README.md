@@ -11,3 +11,4 @@ realizing how much I enjoyed making this plugin makes me want to cry and I hope 
 ## Features
 - Minecraft 1.18 - 1.20 support Luckperms API
 - Join and quit messages
+- Commands to manage **PvP**
