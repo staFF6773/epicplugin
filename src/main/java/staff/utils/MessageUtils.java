@@ -1,12 +1,29 @@
 package staff.utils;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 
-public class MessageUtils {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public static String getColoredMessage(String message){
-        return ChatColor.translateAlternateColorCodes('&',message);
+public class ChatUtils {
+
+    public static String getColoredMessage(String message) {
+
+        if(Bukkit.getVersion().contains("1.18")) {
+
+         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+            Matcher matcher = pattern.matcher(message);
+
+            while(matcher.find()) {
+                String color = message.substring(matcher.start(),matcher.end());
+                message = message.replace(color, ChatColor.of(color)+"");
+
+                matcher = pattern.matcher(message);
+            }
+
+        }
+
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 }
-
-// chat color
