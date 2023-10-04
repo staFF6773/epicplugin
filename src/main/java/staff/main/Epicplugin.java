@@ -37,7 +37,7 @@ public final class Epicplugin extends JavaPlugin implements Listener {
 
         if (getConfig().getBoolean("Player-join.enabled")) {
             if (getConfig().getBoolean("Player-quit.enabled"))
-            Bukkit.getPluginManager().registerEvents(this, this);
+                Bukkit.getPluginManager().registerEvents(this, this);
         }
     }
 
@@ -54,6 +54,7 @@ public final class Epicplugin extends JavaPlugin implements Listener {
         this.getCommand("epicplugin").setExecutor(new MainCommand(this));
         this.getCommand("heal").setExecutor(new heal(this));
     }
+
     @EventHandler
     public void joinserver(PlayerJoinEvent e) {
         if (this.getConfig().getBoolean("Player-join.enabled")) {

@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import staff.main.Epicplugin;
-import staff.utils.MessageUtils;
 
 import java.util.HashMap;
 
@@ -30,7 +29,7 @@ public class repair implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("tuPlugin.repair")) {
+        if (!player.hasPermission("epicplugin.repair")) {
             player.sendMessage(ChatColor.translateAlternateColorCodes(
                     '&',Epicplugin.prefix+" &c&lUPS &cSorry but you do not have permissions to execute this command"));
             return true;
@@ -38,14 +37,16 @@ public class repair implements CommandExecutor {
 
         if (hasCooldown(player)) {
             long timeRemaining = (cooldowns.get(player.getName()) + cooldownDuration - System.currentTimeMillis()) / 1000;
-            player.sendMessage("§f[§bEpicPlugin§f] §cYou must wait " + timeRemaining + " seconds before using this command again.");
+            player.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&',Epicplugin.prefix+" &cYou must wait " + timeRemaining + " seconds before using this command again."));
             return true;
         }
 
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
 
         if (itemInHand.getType().isAir()) {
-            player.sendMessage("§f[§bEpicPlugin§f] §c§lUPS §cYou are not holding any object in your hand.");
+            player.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', Epicplugin.prefix+"  &c&lUPS &cYou are not holding any object in your hand."));
             return true;
         }
 
@@ -53,12 +54,14 @@ public class repair implements CommandExecutor {
         if (itemInHand.getDurability() > 0) {
             // Reparar el objeto estableciendo su durabilidad a cero
             itemInHand.setDurability((short) 0);
-            player.sendMessage("§f[§bEpicPlugin§f] §aThe item you were holding has been successfully repaired..");
+            player.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', Epicplugin.prefix+" &aThe item you were holding has been successfully repaired.."));
 
             // Establecer el tiempo del último uso para el jugador
             setCooldown(player);
         } else {
-            player.sendMessage("§f[§bEpicPlugin§f] §c§lUPS §cI'm sorry but the item you have in your hand does not need repair.");
+            player.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', Epicplugin.prefix+" &c&lUPS &cI'm sorry but the item you have in your hand does not need repair"));
         }
 
         return true;
