@@ -15,6 +15,7 @@ import staff.utils.ChatUtils;
 
 public final class Epicplugin extends JavaPlugin implements Listener {
 
+    // Not to touch these classes
     public static String prefix;
     private String version = getDescription().getVersion();
     ConsoleCommandSender mycmd = Bukkit.getConsoleSender();
