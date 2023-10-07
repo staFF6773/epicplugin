@@ -5,11 +5,11 @@ author: Not_staff
 api-version: '1.18'
 
 commands:
-  pvp:
+  nopvp:
     description: Command to enable/disable PvP and activates
-    usage: /pvp <on|off>
+    usage: /nopvp <on|off>
     aliases:
-      - epicplugin:pvp
+      - epicplugin:nopvp
 
   reload:
     description: Reload the config.yml configuration
