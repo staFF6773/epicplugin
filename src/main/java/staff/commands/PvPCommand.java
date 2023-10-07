@@ -51,7 +51,7 @@ public class PvPCommand implements CommandExecutor, Listener {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("epicplugin.pvp")) {
+        if (!player.hasPermission("epicplugin.nopvp")) {
             player.sendMessage(ChatColor.translateAlternateColorCodes(
                     '&',Epicplugin.prefix+" &c&lUPS &cSorry but you do not have permissions to execute this command"));
             return true;
@@ -59,7 +59,7 @@ public class PvPCommand implements CommandExecutor, Listener {
 
         if (args.length != 1) {
             player.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', Epicplugin.prefix+" &c&lUPS &cIncorrect use of the command /pvp <on | off>"));
+                    '&', Epicplugin.prefix+" &c&lUPS &cIncorrect use of the command /nopvp <on | off>"));
             return true;
         }
 
@@ -81,7 +81,7 @@ public class PvPCommand implements CommandExecutor, Listener {
             }
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', Epicplugin.prefix+" &c&lUPS &cIncorrect use of the command /pvp <on | off>"));
+                    '&', Epicplugin.prefix+" &c&lUPS &cIncorrect use of the command /nopvp <on | off>"));
         }
 
         return true;
