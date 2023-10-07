@@ -1,0 +1,47 @@
+name: epicplugin
+version: '1.2-SNAPSHOT'
+main: staff.main.Epicplugin
+author: Not_staff
+api-version: '1.18'
+
+commands:
+  nopvp:
+    description: Command to enable/disable PvP and activates
+    usage: /nopvp <on|off>
+    aliases:
+      - epicplugin:nopvp
+
+  reload:
+    description: Reload the config.yml configuration
+    aliases:
+      - epicplugin:reload
+
+  repair:
+    description: It is used to repair an object that is broken
+    usage: /<command>
+    aliases:
+      - epicplugin:repair
+
+  epicplugin:
+    description: Plugin main command :D
+    aliases:
+      - ep
+
+  heal:
+    description: with this command you can set the hearts and the food bar
+    usage: /<command>
+    aliases:
+      - epicplugin:heal
+
+permissions:
+  epicplugin.pvp:
+    description: Command to enable/disable PvP and activates
+    default: false
+
+  epicplugin.repair:
+    description: repair a broken object
+    default: false
+
+  epicplugin.heal:
+    description: Used to heal a player
+    default: false
