@@ -11,19 +11,25 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import staff.commands.*;
 import staff.manager.ConfigManager;
+import staff.manager.checkforupdates;
 import staff.utils.ChatUtils;
 
 public final class Epicplugin extends JavaPlugin implements Listener {
 
-    // Not to touch these classes
+    private checkforupdates checkforupdates;
     public static String prefix;
     private String version = getDescription().getVersion();
     ConsoleCommandSender mycmd = Bukkit.getConsoleSender();
 
     private static Epicplugin plugin;
 
+
     @Override //INICIO DE PLUGIN
     public void onEnable() {
+
+        checkforupdates = new checkforupdates(this, "https://api.spigotmc.org/legacy/update.php?resource=112887");
+
+        checkforupdates.iniciarVerificacionDeActualizaciones();
 
         prefix = getConfig().getString("prefix", "&f[&bEpicPlugin&f]");
 
@@ -49,7 +55,7 @@ public final class Epicplugin extends JavaPlugin implements Listener {
     }
 
     public void registerCommands(){
-        this.getCommand("pvp").setExecutor(new PvPCommand(this));
+        this.getCommand("nopvp").setExecutor(new PvPCommand(this));
         this.getCommand("reload").setExecutor(new reload());
         this.getCommand("repair").setExecutor(new repair(this));
         this.getCommand("epicplugin").setExecutor(new MainCommand(this));
