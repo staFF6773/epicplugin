@@ -11,10 +11,9 @@
 # is restarted or powered on and remember to read the /epicplugin:reload message.
 
 prefix: "&f[&bEpicPlugin&f]" #Prefix that comes by default you can customize it without any problem.
-
 ############################################################
 # +------------------------------------------------------+ #
-# |                       PlayerJoinEvent                | #
+# |                       PlayerJoin                     | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -37,7 +36,7 @@ PlayerLeave: '&7[&c-&7] &fGoodbye {player_Name}'
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                      PvPCommand                      | #
+# |                      PvPAdmin                        | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -46,6 +45,15 @@ PlayerLeave: '&7[&c-&7] &fGoodbye {player_Name}'
 pvp:
   cooldown_duration: 600 # The default time in seconds is 10 minutes.
   cooldown_checker_interval: 600 # Frequency of verification in seconds (10 minutes)
+
+message:
+  noPermissionPvP: "&c&lUPS &cSorry, but you do not have permission to execute this command."
+  incorrectUsagePvP: "&c&lUPS &cIncorrect usage of the command /nopvp <on | off>."
+  activationPvP: "&aThe PvP has been activated for you!"
+  deactivationPvP: "&aPvP will be automatically deactivated after &a&l%cooldown%&a seconds!"
+  cooldownErrorPvP: "&c&lUPS &cYou are still in cooldown. You must wait before disabling PvP again."
+  disabledMessagePvP: "&cPvP is disabled for &c&l%player%&c!"
+  cooldownExpiredPvP: "&f&l%player% &chas been automatically activated because your cooldown has already expired."
 
   ############################################################
   # +------------------------------------------------------+ #
@@ -60,4 +68,4 @@ heal-cooldown: 600 # Reuse time in seconds (10 minutes by default)
 repair-cooldown: 60 # Reuse time in seconds (default 1 minutes)
 
 
-version: "1.0.2"
+version: "1.2"
