@@ -18,20 +18,27 @@ import java.util.Map;
 public class PvPCommand implements CommandExecutor, Listener {
 
     private final JavaPlugin plugin;
-    private final Map<String, Long> cooldowns = new HashMap<>(); // Almacena el tiempo de cooldown por jugador en milisegundos
-    private final Map<String, Boolean> pvpStates = new HashMap<>(); // Almacena el estado PvP por jugador
-    private int cooldownDuration; // Duración del cooldown en segundos
-    private int cooldownCheckerInterval; // Frecuencia de verificación del cooldown en segundos
+    private final Map<String, Long> cooldowns = new HashMap<>();
+    private final Map<String, Boolean> pvpStates = new HashMap<>();
+    private int cooldownDuration;
+    private int cooldownCheckerInterval;
+
+    private String noPermissionMessage;
+    private String incorrectUsageMessage;
+    private String activationMessage;
+    private String deactivationMessage;
+    private String cooldownErrorMessage;
+    private String disabledMessage;
+    private String cooldownExpiredMessage;
 
     public PvPCommand(JavaPlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
-        // Cargar configuración desde el archivo config.yml
         this.plugin.saveDefaultConfig();
         loadConfig();
+        loadMessages();
 
-        // Iniciar el verificador de cooldowns
         startCooldownChecker();
     }
 
@@ -41,25 +48,33 @@ public class PvPCommand implements CommandExecutor, Listener {
         cooldownCheckerInterval = config.getInt("pvp.cooldown_checker_interval", 600);
     }
 
+    private void loadMessages() {
+        FileConfiguration config = plugin.getConfig();
+        noPermissionMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.noPermissionPvP"));
+        incorrectUsageMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.incorrectUsagePvP"));
+        activationMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.activationPvP"));
+        deactivationMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.deactivationPvP"));
+        cooldownErrorMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownErrorPvP"));
+        disabledMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.disabledMessagePvP"));
+        cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownExpiredPvP"));
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', Epicplugin.prefix+" &cUPS sorry but this command is only for players."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " &cUPS sorry but this command is only for players."));
             return true;
         }
 
         Player player = (Player) sender;
 
         if (!player.hasPermission("epicplugin.nopvp")) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&',Epicplugin.prefix+" &c&lUPS &cSorry but you do not have permissions to execute this command"));
+            player.sendMessage(noPermissionMessage);
             return true;
         }
 
         if (args.length != 1) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', Epicplugin.prefix+" &c&lUPS &cIncorrect use of the command /nopvp <on | off>"));
+            player.sendMessage(incorrectUsageMessage);
             return true;
         }
 
@@ -67,21 +82,17 @@ public class PvPCommand implements CommandExecutor, Listener {
         if (arg.equals("on")) {
             pvpStates.put(player.getName(), true);
             cooldowns.put(player.getName(), System.currentTimeMillis());
-            player.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', Epicplugin.prefix+" &aThe PvP has been activated for you!"));
+            player.sendMessage(activationMessage);
         } else if (arg.equals("off")) {
             if (!cooldowns.containsKey(player.getName()) || System.currentTimeMillis() - cooldowns.get(player.getName()) > cooldownDuration * 1000) {
                 pvpStates.put(player.getName(), false);
                 cooldowns.put(player.getName(), System.currentTimeMillis() + (cooldownDuration * 1000));
-                player.sendMessage(ChatColor.translateAlternateColorCodes(
-                        '&', Epicplugin.prefix+" &aPvP will be automatically deactivated after &a&l" + cooldownDuration + "&a seconds!"));
+                player.sendMessage(deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration)));
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes(
-                        '&', Epicplugin.prefix+" &c&lUPS &cYou are still in cooldown. You must wait before disabling PvP again."));
+                player.sendMessage(cooldownErrorMessage);
             }
         } else {
-            player.sendMessage(ChatColor.translateAlternateColorCodes(
-                    '&', Epicplugin.prefix+" &c&lUPS &cIncorrect use of the command /nopvp <on | off>"));
+            player.sendMessage(incorrectUsageMessage);
         }
 
         return true;
@@ -93,23 +104,19 @@ public class PvPCommand implements CommandExecutor, Listener {
             Player damaged = (Player) event.getEntity();
             Player damager = (Player) event.getDamager();
 
-            // Verificar el estado PvP del jugador dañado
             Boolean damagedPvP = pvpStates.get(damaged.getName());
             if (damagedPvP == null) {
-                damagedPvP = true; // Si no hay estado registrado, asumimos que está habilitado
+                damagedPvP = true;
             }
 
-            // Verificar el estado PvP del jugador que inflige el daño
             Boolean damagerPvP = pvpStates.get(damager.getName());
             if (damagerPvP == null) {
-                damagerPvP = true; // Si no hay estado registrado, asumimos que está habilitado
+                damagerPvP = true;
             }
 
-            // Cancelar el evento de daño si el PvP está desactivado para el jugador dañado o el que daña
             if (!damagedPvP || !damagerPvP) {
                 event.setCancelled(true);
-                damager.sendMessage(ChatColor.translateAlternateColorCodes(
-                        '&', Epicplugin.prefix+" &cPvP is disabled for &c&l" + damaged.getName() + "&c!"));
+                damager.sendMessage(disabledMessage.replace("%player%", damaged.getName()));
             }
         }
     }
@@ -125,14 +132,12 @@ public class PvPCommand implements CommandExecutor, Listener {
                 cooldowns.remove(playerName);
                 Player player = plugin.getServer().getPlayerExact(playerName);
                 if (player != null) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes(
-                            '&', Epicplugin.prefix+" &f&l" + player.getName() + "&chas been automatically activated because your cooldown has already expired."));
+                    player.sendMessage(cooldownExpiredMessage.replace("%player%", player.getName()));
                 }
             }
         }
     }
 
-    // Called every second to check for expired cooldowns
     private void startCooldownChecker() {
         long ticksInterval = cooldownCheckerInterval * 20L;
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkCooldowns, 20L, ticksInterval);
