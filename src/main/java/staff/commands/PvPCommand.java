@@ -69,30 +69,30 @@ public class PvPCommand implements CommandExecutor, Listener {
         Player player = (Player) sender;
 
         if (!player.hasPermission("epicplugin.nopvp")) {
-            player.sendMessage(noPermissionMessage);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + noPermissionMessage));
             return true;
         }
 
         if (args.length != 1) {
-            player.sendMessage(incorrectUsageMessage);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + incorrectUsageMessage));
             return true;
         }
 
         String arg = args[0].toLowerCase();
-        if (arg.equals("on")) {
+        if (arg.equals("off")) {
             pvpStates.put(player.getName(), true);
             cooldowns.put(player.getName(), System.currentTimeMillis());
-            player.sendMessage(activationMessage);
-        } else if (arg.equals("off")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
+        } else if (arg.equals("on")) {
             if (!cooldowns.containsKey(player.getName()) || System.currentTimeMillis() - cooldowns.get(player.getName()) > cooldownDuration * 1000) {
                 pvpStates.put(player.getName(), false);
                 cooldowns.put(player.getName(), System.currentTimeMillis() + (cooldownDuration * 1000));
-                player.sendMessage(deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration)));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration))));
             } else {
-                player.sendMessage(cooldownErrorMessage);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage));
             }
         } else {
-            player.sendMessage(incorrectUsageMessage);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + incorrectUsageMessage));
         }
 
         return true;
