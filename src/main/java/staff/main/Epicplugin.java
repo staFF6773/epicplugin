@@ -27,7 +27,7 @@ public final class Epicplugin extends JavaPlugin implements Listener {
     @Override //INICIO DE PLUGIN
     public void onEnable() {
 
-        checkforupdates = new checkforupdates(this, "https://api.spigotmc.org/legacy/update.php?resource=112887");
+        checkforupdates = new checkforupdates(this, "https://api.spigotmc.org/legacy/update.php?resource=112887"); // no tocar esto porfavor
 
         checkforupdates.iniciarVerificacionDeActualizaciones();
 
