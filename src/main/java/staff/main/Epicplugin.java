@@ -27,11 +27,11 @@ public final class Epicplugin extends JavaPlugin implements Listener {
     @Override //INICIO DE PLUGIN
     public void onEnable() {
 
-        checkforupdates = new checkforupdates(this, "https://api.spigotmc.org/legacy/update.php?resource=112887"); // no tocar esto porfavor
+        checkforupdates = new checkforupdates(this, "https://api.spigotmc.org/legacy/update.php?resource=112887");
 
         checkforupdates.iniciarVerificacionDeActualizaciones();
 
-        prefix = getConfig().getString("prefix", "&f[&bEpicPlugin&f]");
+        prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("prefix", "&f[&bEpicPlugin&f]"));
 
         plugin = this;
 
@@ -68,7 +68,8 @@ public final class Epicplugin extends JavaPlugin implements Listener {
             Player player = e.getPlayer();
             String playerJoin = "PlayerJoin";
             e.setJoinMessage(ChatColor.translateAlternateColorCodes(
-                    '&', this.getConfig().getString(playerJoin).replace("{player_Name}", player.getName())));
+                    '&', this.getConfig().getString(playerJoin)
+                            .replace("{player_Name}", player.getName())));
         }
     }
 
@@ -78,7 +79,8 @@ public final class Epicplugin extends JavaPlugin implements Listener {
             Player player = e.getPlayer();
             String playerLeave = "PlayerLeave";
             e.setQuitMessage(ChatColor.translateAlternateColorCodes(
-                    '&', this.getConfig().getString(playerLeave).replace("{player_Name}", player.getName())));
+                    '&', this.getConfig().getString(playerLeave)
+                            .replace("{player_Name}", player.getName())));
         }
     }
 
