@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import staff.main.Epicplugin;
 
@@ -30,7 +31,7 @@ public class PvPCommand implements CommandExecutor, Listener {
     private String cooldownErrorMessage;
     private String disabledMessage;
     private String cooldownExpiredMessage;
-
+    private String noPickupMessage;
     public PvPCommand(JavaPlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -57,6 +58,7 @@ public class PvPCommand implements CommandExecutor, Listener {
         cooldownErrorMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownErrorPvP"));
         disabledMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.disabledMessagePvP"));
         cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownExpiredPvP"));
+        noPickupMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.no_pickup"));
     }
 
     @Override
@@ -79,11 +81,11 @@ public class PvPCommand implements CommandExecutor, Listener {
         }
 
         String arg = args[0].toLowerCase();
-        if (arg.equals("off")) {
+        if (arg.equals("on")) {
             pvpStates.put(player.getName(), true);
             cooldowns.put(player.getName(), System.currentTimeMillis());
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
-        } else if (arg.equals("on")) {
+        } else if (arg.equals("off")) {
             if (!cooldowns.containsKey(player.getName()) || System.currentTimeMillis() - cooldowns.get(player.getName()) > cooldownDuration * 1000) {
                 pvpStates.put(player.getName(), false);
                 cooldowns.put(player.getName(), System.currentTimeMillis() + (cooldownDuration * 1000));
@@ -118,6 +120,18 @@ public class PvPCommand implements CommandExecutor, Listener {
                 event.setCancelled(true);
                 damager.sendMessage(disabledMessage.replace("%player%", damaged.getName()));
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        Boolean pvpState = pvpStates.get(player.getName());
+
+        // Cancela el evento si el jugador tiene el PvP desactivado
+        if (pvpState != null && !pvpState) {
+            event.setCancelled(true);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + noPickupMessage));
         }
     }
 
