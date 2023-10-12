@@ -12,7 +12,7 @@ public class ChatUtils {
 
         if(Bukkit.getVersion().contains("1.18")) {
 
-         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+            Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
             Matcher matcher = pattern.matcher(message);
 
             while(matcher.find()) {
