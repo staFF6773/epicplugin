@@ -31,6 +31,7 @@ public class PvPCommand implements CommandExecutor, Listener {
     private final Map<String, BossBar> bossBars = new HashMap<>();
     private int cooldownDuration;
     private int cooldownCheckerInterval;
+    private boolean enableBossBar;
 
     private String noPermissionMessage;
     private String incorrectUsageMessage;
@@ -39,6 +40,7 @@ public class PvPCommand implements CommandExecutor, Listener {
     private String cooldownErrorMessage;
     private String disabledMessage;
     private String cooldownExpiredMessage;
+    private String bossBarMessage;
 
     public PvPCommand(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -56,6 +58,7 @@ public class PvPCommand implements CommandExecutor, Listener {
         FileConfiguration config = plugin.getConfig();
         cooldownDuration = config.getInt("pvp.cooldown_duration", 600);
         cooldownCheckerInterval = config.getInt("pvp.cooldown_checker_interval", 600);
+        enableBossBar = config.getBoolean("pvp.enable_bossbar", true);
     }
 
     private void loadMessages() {
@@ -67,6 +70,7 @@ public class PvPCommand implements CommandExecutor, Listener {
         cooldownErrorMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownErrorPvP"));
         disabledMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.disabledMessagePvP"));
         cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownExpiredPvP"));
+        bossBarMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.bossBarMessage", "&cPvP disabled: &e%remaining_time%s"));
     }
 
     @Override
@@ -94,8 +98,10 @@ public class PvPCommand implements CommandExecutor, Listener {
             cooldowns.remove(player.getName());  // Elimina el cooldown existente si hay alguno
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
 
-            // Elimina la BossBar asociada al jugador si existe
-            removeBossBar(player);
+            // Elimina la BossBar asociada al jugador si existe y la BossBar está habilitada
+            if (enableBossBar) {
+                removeBossBar(player);
+            }
         } else if (arg.equals("off")) {
             if (!cooldowns.containsKey(player.getName()) || System.currentTimeMillis() - cooldowns.get(player.getName()) > cooldownDuration * 1000) {
                 pvpStates.put(player.getName(), false);
@@ -103,7 +109,9 @@ public class PvPCommand implements CommandExecutor, Listener {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration))));
 
                 // Muestra la BossBar con el tiempo restante del PvP desactivado
-                showCooldownBossBar(player);
+                if (enableBossBar) {
+                    showCooldownBossBar(player);
+                }
             } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage));
             }
@@ -135,7 +143,9 @@ public class PvPCommand implements CommandExecutor, Listener {
                 damager.sendMessage(disabledMessage.replace("%player%", damaged.getName()));
 
                 // Muestra la BossBar con el tiempo restante del PvP desactivado
-                showCooldownBossBar(damager);
+                if (enableBossBar) {
+                    showCooldownBossBar(damager);
+                }
             }
         }
     }
@@ -150,19 +160,25 @@ public class PvPCommand implements CommandExecutor, Listener {
             event.setCancelled(true);
 
             // Muestra la BossBar con el tiempo restante del PvP desactivado
-            showCooldownBossBar(player);
+            if (enableBossBar) {
+                showCooldownBossBar(player);
+            }
         }
     }
 
     // Método para mostrar la BossBar con el tiempo restante del PvP desactivado
     private void showCooldownBossBar(Player player) {
+        if (!enableBossBar) {
+            return;  // No mostrar BossBar si está deshabilitada
+        }
+
         long cooldownEndTime = cooldowns.getOrDefault(player.getName(), 0L);
         long currentTime = System.currentTimeMillis();
 
         if (cooldownEndTime > currentTime) {
             // Obtiene la BossBar existente o crea una nueva
             BossBar bossBar = bossBars.computeIfAbsent(player.getName(),
-                    key -> Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', "&cPvP desactivado: &e" + cooldownDuration + "s"), BarColor.RED, BarStyle.SOLID));
+                    key -> Bukkit.createBossBar(parseBossBarMessage(player, cooldownDuration), BarColor.RED, BarStyle.SOLID));
 
             // Añade la BossBar al jugador si no está presente
             if (!bossBar.getPlayers().contains(player)) {
@@ -176,7 +192,7 @@ public class PvPCommand implements CommandExecutor, Listener {
                     long remainingTime = (cooldownEndTime - System.currentTimeMillis()) / 1000L;
 
                     // Actualiza la BossBar
-                    bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&cPvP desactivado: &e" + remainingTime + "s"));
+                    bossBar.setTitle(parseBossBarMessage(player, remainingTime));
                     bossBar.setProgress((double) remainingTime / cooldownDuration);
 
                     // Cancela la tarea si el tiempo restante es menor o igual a cero
@@ -189,15 +205,17 @@ public class PvPCommand implements CommandExecutor, Listener {
         }
     }
 
-    // Método para eliminar la BossBar asociada a un jugador
     private void removeBossBar(Player player) {
+        if (!enableBossBar) {
+            return;  // No eliminar BossBar si está deshabilitada
+        }
+
         BossBar bossBar = bossBars.remove(player.getName());
         if (bossBar != null) {
             bossBar.removeAll();
         }
     }
 
-    // Eventos de unirse y salir del servidor para limpiar las BossBars
     private class PlayerJoinQuitListener implements Listener {
 
         @EventHandler
@@ -213,7 +231,12 @@ public class PvPCommand implements CommandExecutor, Listener {
         }
     }
 
-    // Método para verificar los cooldowns
+    private String parseBossBarMessage(Player player, long remainingTime) {
+        return ChatColor.translateAlternateColorCodes('&', bossBarMessage
+                .replace("%player%", player.getName())
+                .replace("%remaining_time%", String.valueOf(remainingTime)));
+    }
+
     private void checkCooldowns() {
         long currentTime = System.currentTimeMillis();
 
@@ -235,7 +258,6 @@ public class PvPCommand implements CommandExecutor, Listener {
         }
     }
 
-    // Método para iniciar el verificador de cooldowns
     private void startCooldownChecker() {
         long ticksInterval = cooldownCheckerInterval * 20L;
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkCooldowns, 20L, ticksInterval);
