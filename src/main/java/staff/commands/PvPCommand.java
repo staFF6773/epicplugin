@@ -31,7 +31,6 @@ public class PvPCommand implements CommandExecutor, Listener {
     private String cooldownErrorMessage;
     private String disabledMessage;
     private String cooldownExpiredMessage;
-    private String noPickupMessage;
     public PvPCommand(JavaPlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -58,7 +57,6 @@ public class PvPCommand implements CommandExecutor, Listener {
         cooldownErrorMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownErrorPvP"));
         disabledMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.disabledMessagePvP"));
         cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownExpiredPvP"));
-        noPickupMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.no_pickup"));
     }
 
     @Override
@@ -131,7 +129,7 @@ public class PvPCommand implements CommandExecutor, Listener {
         // Cancela el evento si el jugador tiene el PvP desactivado
         if (pvpState != null && !pvpState) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + noPickupMessage));
+
         }
     }
 
