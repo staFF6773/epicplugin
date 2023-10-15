@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import staff.main.Epicplugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,19 +94,34 @@ public class PvPCommand implements CommandExecutor, Listener {
         }
 
         String arg = args[0].toLowerCase();
+
+        // Verifica si hay un cooldown para el jugador
+        if (cooldowns.containsKey(player.getName())) {
+            long cooldownEnd = cooldowns.get(player.getName());
+
+            // Verifica si el cooldown ha terminado
+            if (System.currentTimeMillis() < cooldownEnd) {
+                long remainingTime = (cooldownEnd - System.currentTimeMillis()) / 1000L;
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage.replace("%remaining_time%", String.valueOf(remainingTime))));
+                return true;
+            }
+        }
+
         if (arg.equals("on")) {
             pvpStates.put(player.getName(), true);
-            cooldowns.remove(player.getName());  // Elimina el cooldown existente si hay alguno
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
 
             // Elimina la BossBar asociada al jugador si existe y la BossBar está habilitada
             if (enableBossBar) {
                 removeBossBar(player);
             }
+
+            // Establece el cooldown
+            setCooldown(player);
         } else if (arg.equals("off")) {
             if (!cooldowns.containsKey(player.getName()) || System.currentTimeMillis() - cooldowns.get(player.getName()) > cooldownDuration * 1000) {
-                pvpStates.put(player.getName(), false);
                 cooldowns.put(player.getName(), System.currentTimeMillis() + (cooldownDuration * 1000));
+                pvpStates.put(player.getName(), false);
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration))));
 
                 // Muestra la BossBar con el tiempo restante del PvP desactivado
@@ -120,6 +136,11 @@ public class PvPCommand implements CommandExecutor, Listener {
         }
 
         return true;
+    }
+
+    // Método para establecer el cooldown para un jugador
+    private void setCooldown(Player player) {
+        cooldowns.put(player.getName(), System.currentTimeMillis() + (cooldownDuration * 1000));
     }
 
     @EventHandler
@@ -241,7 +262,7 @@ public class PvPCommand implements CommandExecutor, Listener {
     private void checkCooldowns() {
         long currentTime = System.currentTimeMillis();
 
-        for (String playerName : cooldowns.keySet()) {
+        for (String playerName : new ArrayList<>(cooldowns.keySet())) {
             long cooldownEndTime = cooldowns.get(playerName);
 
             if (currentTime > cooldownEndTime) {
@@ -258,7 +279,6 @@ public class PvPCommand implements CommandExecutor, Listener {
             }
         }
     }
-
 
     private void startCooldownChecker() {
         long ticksInterval = cooldownCheckerInterval * 20L;
