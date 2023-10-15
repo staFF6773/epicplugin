@@ -157,12 +157,13 @@ public class PvPCommand implements CommandExecutor, Listener {
 
         // Cancela el evento solo si el jugador tiene el PvP desactivado
         if (pvpState != null && !pvpState) {
-            event.setCancelled(true);
-
             // Muestra la BossBar con el tiempo restante del PvP desactivado
             if (enableBossBar) {
                 showCooldownBossBar(player);
             }
+
+            // Cancela el evento de recogida de items, pero permite que el jugador lo recoja si el PvP está activado
+            event.setCancelled(true);
         }
     }
 
@@ -257,6 +258,7 @@ public class PvPCommand implements CommandExecutor, Listener {
             }
         }
     }
+
 
     private void startCooldownChecker() {
         long ticksInterval = cooldownCheckerInterval * 20L;
