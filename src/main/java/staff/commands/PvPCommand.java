@@ -155,7 +155,7 @@ public class PvPCommand implements CommandExecutor, Listener {
         Player player = event.getPlayer();
         Boolean pvpState = pvpStates.get(player.getName());
 
-        // Cancela el evento si el jugador tiene el PvP desactivado
+        // Cancela el evento solo si el jugador tiene el PvP desactivado
         if (pvpState != null && !pvpState) {
             event.setCancelled(true);
 
