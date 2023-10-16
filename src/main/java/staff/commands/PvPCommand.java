@@ -95,32 +95,31 @@ public class PvPCommand implements CommandExecutor, Listener {
 
         String arg = args[0].toLowerCase();
 
-        // Verifica si hay un cooldown para el jugador
-        if (cooldowns.containsKey(player.getName())) {
-            long cooldownEnd = cooldowns.get(player.getName());
+        // Verifica si el argumento es "on" o "off"
+        if (arg.equals("on") || arg.equals("off")) {
+            // Verifica si hay un cooldown para el jugador solo cuando se desactiva el PvP
+            if (arg.equals("off") && cooldowns.containsKey(player.getName())) {
+                long cooldownEnd = cooldowns.get(player.getName());
 
-            // Verifica si el cooldown ha terminado
-            if (System.currentTimeMillis() < cooldownEnd) {
-                long remainingTime = (cooldownEnd - System.currentTimeMillis()) / 1000L;
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage.replace("%remaining_time%", String.valueOf(remainingTime))));
-                return true;
-            }
-        }
-
-        if (arg.equals("on")) {
-            pvpStates.put(player.getName(), true);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
-
-            // Elimina la BossBar asociada al jugador si existe y la BossBar está habilitada
-            if (enableBossBar) {
-                removeBossBar(player);
+                // Verifica si el cooldown ha terminado
+                if (System.currentTimeMillis() < cooldownEnd) {
+                    long remainingTime = (cooldownEnd - System.currentTimeMillis()) / 1000L;
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage.replace("%remaining_time%", String.valueOf(remainingTime))));
+                    return true;
+                }
             }
 
-            // Establece el cooldown
-            setCooldown(player);
-        } else if (arg.equals("off")) {
-            if (!cooldowns.containsKey(player.getName()) || System.currentTimeMillis() - cooldowns.get(player.getName()) > cooldownDuration * 1000) {
-                cooldowns.put(player.getName(), System.currentTimeMillis() + (cooldownDuration * 1000));
+            if (arg.equals("on")) {
+                pvpStates.put(player.getName(), true);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
+
+                // Elimina la BossBar asociada al jugador si existe y la BossBar está habilitada
+                if (enableBossBar) {
+                    removeBossBar(player);
+                }
+            } else if (arg.equals("off")) {
+                // Se aplica el cooldown solo cuando se desactiva el PvP
+                setCooldown(player);
                 pvpStates.put(player.getName(), false);
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration))));
 
@@ -128,8 +127,6 @@ public class PvPCommand implements CommandExecutor, Listener {
                 if (enableBossBar) {
                     showCooldownBossBar(player);
                 }
-            } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage));
             }
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + incorrectUsageMessage));
@@ -137,6 +134,7 @@ public class PvPCommand implements CommandExecutor, Listener {
 
         return true;
     }
+
 
     // Método para establecer el cooldown para un jugador
     private void setCooldown(Player player) {
