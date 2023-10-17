@@ -284,3 +284,5 @@ public class PvPCommand implements CommandExecutor, Listener {
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkCooldowns, 20L, ticksInterval);
     }
 }
+
+// Eviten tocar este archivo 
