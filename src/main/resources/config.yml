@@ -2,7 +2,7 @@
 #    ____ ___  _    _  _ ____ ___  _    _  _ ____ _ _ _
 #   |___ |__] |    |  | | __ |__] |    |  | | __ | |\ |
 #   |___ |    |___ |__| |__] |    |___ |__| |__] | | \|
-#                   ᴠᴇʀsɪᴏɴ 1.5-sɴᴀᴘsʜᴏᴛ
+#                   ᴠᴇʀsɪᴏɴ 1.6-sɴᴀᴘsʜᴏᴛ
 #
 # Configuration file. Done with ❤ by Notstaff.
 # For support: https://discord.gg/WS89bmyuD9
@@ -57,7 +57,7 @@ message:
   incorrectUsagePvP: "&c&lUPS &cIncorrect usage of the command /nopvp <off | on>."
   activationPvP: "&aThe PvP has been activated for you!"
   deactivationPvP: "&aPvP will be automatically deactivated after &a&l%cooldown%&a seconds!"
-  cooldownErrorPvP: "&c&lUPS &cYou are still in cooldown. You must wait before disabling PvP again."
+  cooldownErrorPvP: "&c&lUPS You must wait %remaining_time% seconds before disabling PvP again."
   disabledMessagePvP: "&cPvP is disabled for &c&l%player%&c!"
   cooldownExpiredPvP: "&f&l%player% &chas been automatically activated because your cooldown has already expired."
   bossBarMessage: "&cPvP disabled: &e%remaining_time%s"
@@ -75,4 +75,4 @@ heal-cooldown: 600 # Reuse time in seconds (10 minutes by default)
 repair-cooldown: 60 # Reuse time in seconds (default 1 minutes)
 
 
-version: "1.5"
+version: "1.6"
