@@ -1,0 +1,78 @@
+#
+#    ____ ___  _    _  _ ____ ___  _    _  _ ____ _ _ _
+#   |___ |__] |    |  | | __ |__] |    |  | | __ | |\ |
+#   |___ |    |___ |__| |__] |    |___ |__| |__] | | \|
+#                   ᴠᴇʀsɪᴏɴ 1.6-sɴᴀᴘsʜᴏᴛ
+#
+# Configuration file. Done with ❤ by Notstaff.
+# For support: https://discord.gg/WS89bmyuD9
+
+# The prefix is updated every time the server
+# is restarted or powered on and remember to read the /epicplugin:reload message.
+
+prefix: "&f[&bEpicPlugin&f]" #Prefix that comes by default you can customize it without any problem.
+############################################################
+# +------------------------------------------------------+ #
+# |                       PlayerJoin                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+Player-join:
+  enabled: true # You CAN remove this altogether, by doing so it will default to TRUE
+
+# Available placeholders
+# {player_Name}
+
+# Player input message
+# This message is 100% configurable and is also supported by placeholderapi.
+PlayerJoin: '&7[&a+&7] &fWelcome {player_Name}'
+
+Player-quit:
+  enabled: true # You CAN remove this altogether, by doing so it will default to TRUE
+
+#Message when a player leaves the server
+#This message can also be configured as the Join and has placeholderapi support.
+PlayerLeave: '&7[&c-&7] &fGoodbye {player_Name}'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                      PvPAdmin                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This is the cooldown of the /nopvp on/off command,
+# here you can modify the cooldown time to set the time you want.
+pvp:
+  cooldown_duration: 600 # The default time in seconds is 10 minutes.
+  cooldown_checker_interval: 600 # Frequency of verification in seconds (10 minutes)
+  enable_bossbar: true # This option is set to true by default, but you can deactivate it with false.
+
+# Available placeholders
+# %player%
+# %cooldown%
+# %remaining_time%
+
+message:
+  noPermissionPvP: "&c&lUPS &cSorry, but you do not have permission to execute this command."
+  incorrectUsagePvP: "&c&lUPS &cIncorrect usage of the command /nopvp <off | on>."
+  activationPvP: "&aThe PvP has been activated for you!"
+  deactivationPvP: "&aPvP will be automatically deactivated after &a&l%cooldown%&a seconds!"
+  cooldownErrorPvP: "&c&lUPS You must wait %remaining_time% seconds before disabling PvP again."
+  disabledMessagePvP: "&cPvP is disabled for &c&l%player%&c!"
+  cooldownExpiredPvP: "&f&l%player% &chas been automatically activated because your cooldown has already expired."
+  bossBarMessage: "&cPvP disabled: &e%remaining_time%s"
+
+  ############################################################
+  # +------------------------------------------------------+ #
+  # |                      Cooldowns                       | #
+  # +------------------------------------------------------+ #
+  ############################################################
+
+# In this category you will find the cooldown
+# of the commands Heal, Repair and over time more will be added.
+
+heal-cooldown: 600 # Reuse time in seconds (10 minutes by default)
+repair-cooldown: 60 # Reuse time in seconds (default 1 minutes)
+
+
+version: "1.6"
