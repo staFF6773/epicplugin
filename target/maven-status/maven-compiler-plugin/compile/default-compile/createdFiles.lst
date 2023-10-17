@@ -1,9 +1,0 @@
-staff\commands\reload.class
-staff\commands\PvPCommand.class
-staff\manager\checkforupdates.class
-staff\main\Epicplugin.class
-staff\utils\ChatUtils.class
-staff\commands\MainCommand.class
-staff\commands\repair.class
-staff\manager\checkforupdates$1.class
-staff\manager\ConfigManager.class
