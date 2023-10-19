@@ -1,3 +1,5 @@
+//No tocar esta parte
+
 package staff.utils;
 
 import net.md_5.bungee.api.ChatColor;
