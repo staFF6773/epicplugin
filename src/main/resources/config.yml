@@ -2,7 +2,7 @@
 #    ____ ___  _    _  _ ____ ___  _    _  _ ____ _ _ _
 #   |___ |__] |    |  | | __ |__] |    |  | | __ | |\ |
 #   |___ |    |___ |__| |__] |    |___ |__| |__] | | \|
-#                   ᴠᴇʀsɪᴏɴ 1.6-sɴᴀᴘsʜᴏᴛ
+#                   ᴠᴇʀsɪᴏɴ 1.7-sɴᴀᴘsʜᴏᴛ
 #
 # Configuration file. Done with ❤ by Notstaff.
 # For support: https://discord.gg/WS89bmyuD9
@@ -75,4 +75,4 @@ heal-cooldown: 600 # Reuse time in seconds (10 minutes by default)
 repair-cooldown: 60 # Reuse time in seconds (default 1 minutes)
 
 
-version: "1.6"
+version: "1.7"
