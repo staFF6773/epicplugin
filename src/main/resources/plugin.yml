@@ -2,7 +2,7 @@ name: epicplugin
 version: '${project.version}'
 main: staff.main.Epicplugin
 author: Not_staff
-api-version: '1.18'
+api-version: '1.17'
 
 commands:
   nopvp:
@@ -34,7 +34,7 @@ commands:
       - epicplugin:heal
 
 permissions:
-  epicplugin.pvp:
+  epicplugin.nopvp:
     description: Command to enable/disable PvP and activates
     default: false
 
