@@ -257,6 +257,24 @@ public class PvPCommand implements CommandExecutor, Listener {
                 .replace("%remaining_time%", String.valueOf(remainingTime)));
     }
 
+    private void forcePvPOnIf60SecondsRemaining(Player player) {
+        if (cooldowns.containsKey(player.getName())) {
+            long cooldownEnd = cooldowns.get(player.getName());
+            long currentTime = System.currentTimeMillis();
+
+            if (cooldownEnd > currentTime && (cooldownEnd - currentTime) <= 60000) {
+                // Menos de 60 segundos de cooldown restantes, forzar nopvp on
+                pvpStates.put(player.getName(), true);
+                cooldowns.remove(player.getName());
+                removeBossBar(player);
+
+                // Envía un mensaje al jugador si lo deseas
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
+            }
+        }
+    }
+
+
     private void checkCooldowns() {
         long currentTime = System.currentTimeMillis();
 
@@ -266,19 +284,21 @@ public class PvPCommand implements CommandExecutor, Listener {
             if (currentTime > cooldownEndTime) {
                 pvpStates.put(playerName, true);
                 cooldowns.remove(playerName);
-
-                // Elimina la BossBar asociada
                 removeBossBar(Bukkit.getPlayerExact(playerName));
 
                 Player player = plugin.getServer().getPlayerExact(playerName);
                 if (player != null) {
                     player.sendMessage(cooldownExpiredMessage.replace("%player%", player.getName()));
                 }
+            } else {
+                Player player = plugin.getServer().getPlayerExact(playerName);
+                if (player != null) {
+                    forcePvPOnIf60SecondsRemaining(player);
+                }
             }
         }
     }
-
-
+    
     private void startCooldownChecker() {
         long ticksInterval = cooldownCheckerInterval * 20L;
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkCooldowns, 20L, ticksInterval);
