@@ -298,7 +298,7 @@ public class PvPCommand implements CommandExecutor, Listener {
             }
         }
     }
-    
+
     private void startCooldownChecker() {
         long ticksInterval = cooldownCheckerInterval * 20L;
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkCooldowns, 20L, ticksInterval);
