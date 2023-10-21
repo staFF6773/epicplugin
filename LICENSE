@@ -1,31 +1,31 @@
-**MIT License**
+MIT License
 
-**Copyright (c) 2023 staFF6773**
+Copyright (c) 2023 staFF6773
 
 This is the header of the license, indicating the copyright holder of the software and the year of copyright. In this case, the copyright holder is "staFF6773," and the year is "2023."
 
-**Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:**
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 This paragraph states that free permission is granted to anyone obtaining a copy of the software (referred to as the "Software") and its associated documentation files. Individuals who acquire the software have the right to do the following without any restrictions:
 
-1. **Use:** They can use the software for any purpose.
-2. **Copy:** They can make copies of the software.
-3. **Modify:** They can make modifications to the software.
-4. **Merge:** They can combine the software with other programs or software.
-5. **Publish:** They can publish the software.
-6. **Distribute:** They can distribute the software to others.
-7. **Sublicense:** They can grant licenses to third parties to use the software.
-8. **Sell:** They can sell copies of the software.
+1. Use: They can use the software for any purpose.
+2. Copy: They can make copies of the software.
+3. Modify: They can make modifications to the software.
+4. Merge: They can combine the software with other programs or software.
+5. Publish: They can publish the software.
+6. Distribute: They can distribute the software to others.
+7. Sublicense: They can grant licenses to third parties to use the software.
+8. Sell: They can sell copies of the software.
 
 All of this can be done free of charge.
 
 However, these rights are subject to certain conditions, which are outlined in the following paragraph:
 
-**The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.**
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 This paragraph states that, when performing any of the aforementioned activities (using, copying, modifying, distributing, etc.), both the copyright notice (Copyright) and the permission notice (Permission) must be included in all copies or substantial portions of the software. This ensures that the copyright holder is acknowledged, and it's understood that the software is provided under the MIT License.
 
-**THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.**
+THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 This final paragraph states that the software is provided "as is," without any kind of warranty, whether express or implied. It also clarifies that neither the authors nor the copyright holders will be liable for any claims, damages, or other liability, whether in a contractual action or otherwise, arising from or in connection with the use of the software. In other words, the software is provided without warranty, and users use it at their own risk.
 
