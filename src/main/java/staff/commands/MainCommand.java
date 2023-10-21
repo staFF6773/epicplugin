@@ -22,6 +22,7 @@ import staff.main.Epicplugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class PvPCommand implements CommandExecutor, Listener {
@@ -30,6 +31,7 @@ public class PvPCommand implements CommandExecutor, Listener {
     private final Map<String, Long> cooldowns = new HashMap<>();
     private final Map<String, Boolean> pvpStates = new HashMap<>();
     private final Map<String, BossBar> bossBars = new HashMap<>();
+
     private int cooldownDuration;
     private int cooldownCheckerInterval;
     private boolean enableBossBar;
@@ -256,52 +258,28 @@ public class PvPCommand implements CommandExecutor, Listener {
                 .replace("%player%", player.getName())
                 .replace("%remaining_time%", String.valueOf(remainingTime)));
     }
-
-    private void forcePvPOnIf60SecondsRemaining(Player player) {
-        if (cooldowns.containsKey(player.getName())) {
-            long cooldownEnd = cooldowns.get(player.getName());
+    private void startCooldownChecker() {
+        long ticksInterval = 1L;  // Verifica el cooldown cada tick (cada juego).
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             long currentTime = System.currentTimeMillis();
 
-            if (cooldownEnd > currentTime && (cooldownEnd - currentTime) <= 60000) {
-                // Menos de 60 segundos de cooldown restantes, forzar nopvp on
-                pvpStates.put(player.getName(), true);
-                cooldowns.remove(player.getName());
-                removeBossBar(player);
-
-                // Envía un mensaje al jugador si lo deseas
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
-            }
-        }
-    }
-
-    private void checkCooldowns() {
-        long currentTime = System.currentTimeMillis();
-
-        for (String playerName : new ArrayList<>(cooldowns.keySet())) {
-            long cooldownEndTime = cooldowns.get(playerName);
-
-            if (currentTime > cooldownEndTime) {
-                pvpStates.put(playerName, true);
-                cooldowns.remove(playerName);
-                removeBossBar(Bukkit.getPlayerExact(playerName));
+            for (Iterator<Map.Entry<String, Long>> iterator = cooldowns.entrySet().iterator(); iterator.hasNext();) {
+                Map.Entry<String, Long> entry = iterator.next();
+                long cooldownEndTime = entry.getValue();
+                String playerName = entry.getKey();
 
                 Player player = plugin.getServer().getPlayerExact(playerName);
+
                 if (player != null) {
-                    player.sendMessage(cooldownExpiredMessage.replace("%player%", player.getName()));
-                }
-            } else {
-                Player player = plugin.getServer().getPlayerExact(playerName);
-                if (player != null) {
-                    forcePvPOnIf60SecondsRemaining(player);
+                    if (currentTime > cooldownEndTime) {
+                        pvpStates.put(playerName, true);
+                        removeBossBar(player);
+                        iterator.remove();
+
+                        player.sendMessage(cooldownExpiredMessage.replace("%player%", player.getName()));
+                    }
                 }
             }
-        }
-    }
-
-
-
-    private void startCooldownChecker() {
-        long ticksInterval = cooldownCheckerInterval * 20L;
-        plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkCooldowns, 20L, ticksInterval);
+        }, 1L, ticksInterval);
     }
 }
