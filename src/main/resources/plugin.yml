@@ -5,6 +5,12 @@ author: Not_staff
 api-version: '1.17'
 
 commands:
+  epicplugin:
+    description: With this command you can see all the commands of the plugin
+    usage: /<command>
+    aliases:
+      - help
+
   nopvp:
     description: Command to enable/disable PvP and activates
     usage: /nopvp <on|off>
@@ -14,26 +20,29 @@ commands:
   reload:
     description: Reload the config.yml configuration
     aliases:
-      - epicplugin:reload
+      - reload
 
   repair:
     description: It is used to repair an object that is broken
     usage: /<command>
     aliases:
-      - epicplugin:repair
-
-  epicplugin:
-    description: Plugin main command :D
-    aliases:
-      - ep
+      - repair
 
   heal:
     description: with this command you can set the hearts and the food bar
     usage: /<command>
     aliases:
-      - epicplugin:heal
+      - heal
 
 permissions:
+  epicplugin.reload:
+    description: Reload the plugin configuration
+    default: false
+
+  epicplugin.help:
+    description: With this command you can see all the commands of the plugin
+    default: false
+
   epicplugin.nopvp:
     description: Command to enable/disable PvP and activates
     default: false
