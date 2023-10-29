@@ -16,4 +16,9 @@ realizing how much I enjoyed making this plugin makes me want to cry and I hope 
 - Combat progress display in ACTION or BOSS-bar
 - We have a **wiki** updated to the latest version.
 
+## Support
+If you have any problem with the plugin, do not hesitate to contact the official support from our
+<br>
+discord <a href="https://discord.gg/tnVKckUF">Discord.gg/sstudios</a>.
+
 [![Captura-de-pantalla-2023-09-30-154645.png](https://i.postimg.cc/TYF9c9fF/Captura-de-pantalla-2023-09-30-154645.png)](https://postimg.cc/gny8z3wH)
