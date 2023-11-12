@@ -2,10 +2,10 @@
 #    ____ ___  _    _  _ ____ ___  _    _  _ ____ _ _ _
 #   |___ |__] |    |  | | __ |__] |    |  | | __ | |\ |
 #   |___ |    |___ |__| |__] |    |___ |__| |__] | | \|
-#                   ᴠᴇʀsɪᴏɴ 1.8-sɴᴀᴘsʜᴏᴛ
+#                   ᴠᴇʀsɪᴏɴ 1.10-sɴᴀᴘsʜᴏᴛ
 #
 # Configuration file. Done with ❤ by Notstaff.
-# For support: https://discord.gg/WS89bmyuD9
+# For support: https://discord.gg/tnVKckUF
 
 # The prefix is updated every time the server
 # is restarted or powered on and remember to read the /epicplugin:reload message.
@@ -44,7 +44,7 @@ PlayerLeave: '&7[&c-&7] &fGoodbye {player_Name}'
 # here you can modify the cooldown time to set the time you want.
 pvp:
   cooldown_duration: 600 # The default time in seconds is 10 minutes.
-  cooldown_checker_interval: 600 # Frequency of verification in seconds (10 minutes)
+  command_cooldown_duration: 700 # Frequency of verification in seconds (11 minutes)
   enable_bossbar: true # This option is set to true by default, but you can deactivate it with false.
 
 # Available placeholders
@@ -75,4 +75,4 @@ heal-cooldown: 600 # Reuse time in seconds (10 minutes by default)
 repair-cooldown: 60 # Reuse time in seconds (default 1 minutes)
 
 
-version: "1.8"
+version: "1.10"
