@@ -1,6 +1,5 @@
-package commands;
+package staff.commands;
 
-import ep.staff.epicpremium.EpicPremium;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
@@ -19,6 +18,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import staff.main.Epicplugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,11 +29,12 @@ public class PvPCommand implements CommandExecutor, Listener {
 
     private final JavaPlugin plugin;
     private final Map<String, Long> cooldowns = new HashMap<>();
+    private final Map<String, Long> commandCooldowns = new HashMap<>();
     private final Map<String, Boolean> pvpStates = new HashMap<>();
     private final Map<String, BossBar> bossBars = new HashMap<>();
 
     private int cooldownDuration;
-    private int cooldownCheckerInterval;
+    private int commandCooldownDuration;
     private boolean enableBossBar;
 
     private String noPermissionMessage;
@@ -60,7 +61,7 @@ public class PvPCommand implements CommandExecutor, Listener {
     private void loadConfig() {
         FileConfiguration config = plugin.getConfig();
         cooldownDuration = config.getInt("pvp.cooldown_duration", 600);
-        cooldownCheckerInterval = config.getInt("pvp.cooldown_checker_interval", 600);
+        commandCooldownDuration = config.getInt("pvp.command_cooldown_duration", 700);
         enableBossBar = config.getBoolean("pvp.enable_bossbar", true);
     }
 
@@ -74,24 +75,36 @@ public class PvPCommand implements CommandExecutor, Listener {
         disabledMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.disabledMessagePvP"));
         cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.cooldownExpiredPvP"));
         bossBarMessage = ChatColor.translateAlternateColorCodes('&', config.getString("message.bossBarMessage", "&cPvP disabled: &e%remaining_time%s"));
+        
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " &cUPS sorry but this command is only for players."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " &cUPS sorry but this command is only for players."));
             return true;
         }
 
         Player player = (Player) sender;
 
         if (!player.hasPermission("epicplugin.nopvp")) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " " + noPermissionMessage));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + noPermissionMessage));
             return true;
         }
 
+        long currentTime = System.currentTimeMillis();
+        if (commandCooldowns.containsKey(player.getName())) {
+            long lastExecutionTime = commandCooldowns.get(player.getName());
+
+            if (currentTime - lastExecutionTime < commandCooldownDuration * 1000L) {
+                long remainingTime = (lastExecutionTime + commandCooldownDuration * 1000L - currentTime) / 1000L;
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage.replace("%remaining_time%", String.valueOf(remainingTime))));
+                return true;
+            }
+        }
+
         if (args.length != 1) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " " + incorrectUsageMessage));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + incorrectUsageMessage));
             return true;
         }
 
@@ -106,14 +119,14 @@ public class PvPCommand implements CommandExecutor, Listener {
                 // Verifica si el cooldown ha terminado
                 if (System.currentTimeMillis() < cooldownEnd) {
                     long remainingTime = (cooldownEnd - System.currentTimeMillis()) / 1000L;
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " " + cooldownErrorMessage.replace("%remaining_time%", String.valueOf(remainingTime))));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + cooldownErrorMessage.replace("%remaining_time%", String.valueOf(remainingTime))));
                     return true;
                 }
             }
 
             if (arg.equals("on")) {
                 pvpStates.put(player.getName(), true);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " " + activationMessage));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + activationMessage));
 
                 // Elimina la BossBar asociada al jugador si existe y la BossBar está habilitada
                 if (enableBossBar) {
@@ -123,7 +136,7 @@ public class PvPCommand implements CommandExecutor, Listener {
                 // Se aplica el cooldown solo cuando se desactiva el PvP
                 setCooldown(player);
                 pvpStates.put(player.getName(), false);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " " + deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration))));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + deactivationMessage.replace("%cooldown%", String.valueOf(cooldownDuration))));
 
                 // Muestra la BossBar con el tiempo restante del PvP desactivado
                 if (enableBossBar) {
@@ -131,11 +144,15 @@ public class PvPCommand implements CommandExecutor, Listener {
                 }
             }
         } else {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', EpicPremium.prefix + " " + incorrectUsageMessage));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Epicplugin.prefix + " " + incorrectUsageMessage));
         }
+
+        // Actualiza el tiempo de la última ejecución del comando
+        commandCooldowns.put(player.getName(), currentTime);
 
         return true;
     }
+
 
 
     // Método para establecer el cooldown para un jugador
